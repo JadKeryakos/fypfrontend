@@ -18,6 +18,9 @@ from views.testsStats import tests_stats_layout
 from views.cppCheck import cpp_check_layout
 from views.home import home_layout
 
+server = app.server
+
+
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 df = pd.DataFrame({
