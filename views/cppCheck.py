@@ -10,7 +10,7 @@ import pandas as pd
 labels = ["error", "performance", "portability", "style", "warning"]
 
 
-# base_url = "http://localhost:8081/cppcheck/"
+# base_url = "https://fypbackendstr.herokuapp.com/cppcheck/"
 
 
 # Generate request based on request_type, custom endpoint path, and a request body using a base_url
@@ -25,7 +25,7 @@ def request_generator(request_type, url, request_body):
 
 # API call to get the last 10 builds names
 def fetch_latest_build(size):
-    build_names_json = request_generator("get", "http://localhost:8081/builds/{}".format(size), None)
+    build_names_json = request_generator("get", "https://fypbackendstr.herokuapp.com/builds/{}".format(size), None)
     build_names_list = []
     for build in reversed(build_names_json):
         build_names_list.insert(0, build['buildName'])
@@ -40,7 +40,7 @@ def parse_data_for_comparison(value):
     if value is None or len(value) == 0:
         return {}
     # API call to get build stats for specific build names fetched from the dropdown
-    comparison_data = request_generator("post", "http://localhost:8081/builds-name/cppChecks", {"buildNames": value})
+    comparison_data = request_generator("post", "https://fypbackendstr.herokuapp.com/builds-name/cppChecks", {"buildNames": value})
 
     res = dict()
     for select_value in value:
@@ -130,7 +130,7 @@ def bar_render(number):
         "aggregations": aggregation_type
     }
     fig1 = px.bar(pd.DataFrame.from_dict(
-        parse_data(request_generator("post", "http://localhost:8081/builds/cppCheck-agg", body))),
+        parse_data(request_generator("post", "https://fypbackendstr.herokuapp.com/builds/cppCheck-agg", body))),
                   barmode="group", template="presentation")
     return fig1
 
@@ -141,9 +141,9 @@ def bar_render(number):
 )
 def graph_render(number):
     if number:
-        request_url = "http://localhost:8081/cppChecks/last/" + str(number)
+        request_url = "https://fypbackendstr.herokuapp.com/cppChecks/last/" + str(number)
     else:
-        request_url = "http://localhost:8081/cppChecks"
+        request_url = "https://fypbackendstr.herokuapp.com/cppChecks"
     df = parse_response(request_generator("get", request_url, None))
     fig = px.line(df, x="Builds", y=labels, height=800, title="CppCheck Data", template="presentation")
     fig.update_traces(mode='markers+lines')

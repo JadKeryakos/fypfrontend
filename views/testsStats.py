@@ -20,7 +20,7 @@ def request_generator(request_type, url, request_body):
 
 
 def fetch_latest_build_test(size):
-    build_names_json = request_generator("get", "http://localhost:8081/builds/{}".format(size), None)
+    build_names_json = request_generator("get", "https://fypbackendstr.herokuapp.com/builds/{}".format(size), None)
     build_names_list = []
     for build in reversed(build_names_json):
         build_names_list.insert(0, build['buildName'])
@@ -97,7 +97,7 @@ def parse_test_data_for_comparison(value):
     if value is None or len(value) == 0:
         return {}
     # API call to get build stats for specific build names fetched from the dropdown
-    comparison_data = request_generator("post", "http://localhost:8081/build/tests/names/", {"names": value})
+    comparison_data = request_generator("post", "https://fypbackendstr.herokuapp.com/build/tests/names/", {"names": value})
     res = dict()
     for select_value in value:
         res[select_value] = dict()
@@ -116,9 +116,9 @@ def parse_test_data_for_comparison(value):
 )
 def graph_render(number):
     if number:
-        request_url = "http://localhost:8081/build/tests/last/" + str(number)
+        request_url = "https://fypbackendstr.herokuapp.com/build/tests/last/" + str(number)
     else:
-        request_url = "http://localhost:8081/tests"
+        request_url = "https://fypbackendstr.herokuapp.com/tests"
     df = parse_response_test(request_generator("get", request_url, None))
     fig = px.line(df, x="Builds", y=tests_labels, height=800, title="Tests Data", template="presentation")
     fig.update_traces(mode='markers+lines')
@@ -141,7 +141,7 @@ def test_bar_render(number):
         "aggregations": aggregation_type
     }
     fig1 = px.bar(pd.DataFrame.from_dict(
-        parse_test_data(request_generator("post", "http://localhost:8081/builds/test/agg", body))),
+        parse_test_data(request_generator("post", "https://fypbackendstr.herokuapp.com/builds/test/agg", body))),
         barmode="group", template="presentation")
     return fig1
 
