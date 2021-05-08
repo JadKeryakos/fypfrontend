@@ -19,15 +19,8 @@ from views.cppCheck import cpp_check_layout
 from views.home import home_layout
 
 server = app.server
+app.title="FYP-Frontend"
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "time": ["2011", "2012", "2013", "2014", "2015", "2016"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-})
-
-fig = px.line(df, x="time", y="Amount", title='Random Line Chart')
 
 app.layout = html.Div([
     dcc.Location(id='location', refresh=False),
