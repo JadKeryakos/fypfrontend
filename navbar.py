@@ -8,10 +8,9 @@ navbar = dbc.NavbarSimple(
 
     children=[
         dbc.NavItem(dbc.NavLink("Home", href="/home")),
-        dbc.NavItem(dbc.NavLink("Builds", href="/builds")),
+        dbc.NavItem(dbc.NavLink("Builds & Tests Stats", href="/builds-tests-stats")),
         dbc.NavItem(dbc.NavLink("CppCheck", href="/cpp-check")),
         dbc.NavItem(dbc.NavLink("Bazel Stats", href="/bazel-stats")),
-        dbc.NavItem(dbc.NavLink("Tests Stats", href="/tests-stats")),
     ],
     brand="Iw.Hub Pipeline Statistics",
     brand_href="/home",
