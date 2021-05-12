@@ -17,10 +17,10 @@ from views.bazelStats import bazel_stats_layout
 from views.testsStats import tests_stats_layout
 from views.cppCheck import cpp_check_layout
 from views.home import home_layout
+from views.builds import builds_layout
 
 server = app.server
-app.title="FYP-Frontend"
-
+app.title = "FYP-Frontend"
 
 app.layout = html.Div([
     dcc.Location(id='location', refresh=False),
@@ -32,6 +32,7 @@ not_found_layout = [html.H3("404"), html.H5("Page not found")]
 layout_dict = {
     '/': home_layout,
     '/home': home_layout,
+    '/builds': builds_layout,
     '/bazel-stats': bazel_stats_layout,
     '/cpp-check': cpp_check_layout,
     '/tests-stats': tests_stats_layout,
