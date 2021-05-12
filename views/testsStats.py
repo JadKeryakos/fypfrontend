@@ -6,8 +6,10 @@ import requests
 from app import app
 from dash.dependencies import Input, Output
 import pandas as pd
+from plotly.subplots import make_subplots
 
-tests_labels = ["testFailed", "testPassed", "Average"]
+tests_labels = ["testFailed", "testPassed" ]
+average = ["Average"]
 
 
 def request_generator(request_type, url, request_body):
@@ -160,9 +162,24 @@ def graph_render(number):
     else:
         request_url = "https://fypbackendstr.herokuapp.com/tests"
     df = parse_response_test(request_generator("get", request_url, None))
-    fig = px.line(df, x="Builds", y=tests_labels, height=800, title="Tests Data", template="presentation")
+
+    subfig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    fig = px.line(df, x="Builds", y=tests_labels, render_mode="webgl", template="presentation")
+    fig2 = px.line(df, x="Builds", y=average, render_mode="webgl", template="presentation")
+
     fig.update_traces(mode='markers+lines')
-    return fig
+    fig2.update_traces(mode='markers+lines')
+
+    fig2.update_traces(yaxis="y2")
+
+    subfig.add_traces(fig.data + fig2.data)
+    subfig.layout.xaxis.title = "Builds"
+    subfig.layout.yaxis.title = "Value (For Failed and Passed Tests)"
+    subfig.layout.yaxis2.title = "Percentage (For Average)"
+    subfig.for_each_trace(lambda t: t.update(line=dict(color=t.marker.color)))
+
+    return subfig
 
 
 @app.callback(
