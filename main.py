@@ -19,8 +19,7 @@ from views.cppCheck import cpp_check_layout
 from views.home import home_layout
 
 server = app.server
-app.title="FYP-Frontend"
-
+app.title = "FYP-Frontend"
 
 app.layout = html.Div([
     dcc.Location(id='location', refresh=False),
@@ -32,9 +31,9 @@ not_found_layout = [html.H3("404"), html.H5("Page not found")]
 layout_dict = {
     '/': home_layout,
     '/home': home_layout,
+    '/builds-tests-stats': tests_stats_layout,
     '/bazel-stats': bazel_stats_layout,
     '/cpp-check': cpp_check_layout,
-    '/tests-stats': tests_stats_layout,
 }
 
 
