@@ -88,7 +88,7 @@ def parse_data_for_comparison(value):
         for type_of_stats in build_stats['payload']:
             res[build_stats['build']["build_name"]][type_of_stats['name']] = type_of_stats['time']
 
-    return px.bar(pd.DataFrame.from_dict(res), barmode="group")
+    return px.bar(pd.DataFrame.from_dict(res), barmode="group", template="presentation")
 
 
 bazel_stats_layout = html.Div(children=[
@@ -109,6 +109,9 @@ bazel_stats_layout = html.Div(children=[
         id='Bazel-Stats-Aggregation-Graph',
         figure={}
     ),
+    html.Br(),
+    html.Br(),
+    html.Br(),
     html.H3("Comparison of selected builds"),
     html.Div(
         id='my-dropdown-div-parent-bazel-stats',
@@ -166,7 +169,8 @@ def bazel_stats_aggregation_graph_update(number):
     if number is None:
         number = 2
     aggregation_data = fetch_data_aggregation(number)
-    return px.bar(pd.DataFrame.from_dict(parse_data_for_aggregation(aggregation_data)), barmode="group")
+    return px.bar(pd.DataFrame.from_dict(parse_data_for_aggregation(aggregation_data)), barmode="group",
+                  template="presentation")
 
 
 @app.callback(
