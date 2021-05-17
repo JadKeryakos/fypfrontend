@@ -40,7 +40,7 @@ def parse_data_for_comparison(value):
     if value is None or len(value) == 0:
         return {}
     # API call to get build stats for specific build names fetched from the dropdown
-    comparison_data = request_generator("post", "https://fypbackendstr.herokuapp.com/builds-name/cppChecks", {"buildNames": value})
+    comparison_data = request_generator("post", "https://fypbackendstr.herokuapp.com/cppChecks/build-names", {"buildNames": value})
 
     res = dict()
     for select_value in value:
@@ -130,7 +130,7 @@ def bar_render(number):
         "aggregations": aggregation_type
     }
     fig1 = px.bar(pd.DataFrame.from_dict(
-        parse_data(request_generator("post", "https://fypbackendstr.herokuapp.com/builds/cppCheck-agg", body))),
+        parse_data(request_generator("post", "https://fypbackendstr.herokuapp.com/cppChecks/agg", body))),
                   barmode="group", template="presentation")
     return fig1
 
