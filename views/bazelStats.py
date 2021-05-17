@@ -7,8 +7,10 @@ import requests
 from dash.dependencies import Input, Output
 from app import app
 
-
-base_url = "https://fypbackendstr.herokuapp.com/bazel-stats/"
+# base_url = "https://fypbackendstr.herokuapp.com/bazel-stats/"
+stats_labels = ["total_launch_phase_time", "total_init_phase_time", "total_loading_phase_time",
+                "total_analysis_phase_time", "total_preparation_phase_time", "total_execution_phase_time",
+                "total_finish_phase_time", "total_run_time"]
 
 
 # Method that receives the shape of a given request and returns a json object from the specified stats service.
@@ -17,8 +19,25 @@ def request_generator(request_type, url, request_body):
         response = requests.post(url, json=request_body)
     else:
         response = requests.get(url)
-
     return response.json()
+
+
+def parse_stats_response(payload):
+    res = dict()
+    res["Builds"] = list()
+
+    for key in payload:
+        res["Builds"].append(key['build']['build_name'])
+
+    for key in stats_labels:
+        res[key] = list()
+
+    for elt in payload:
+        for data in elt['payload']:
+            if data['name'] in stats_labels:
+                res[data['name']].append(data['time'])
+
+    return res
 
 
 def fetch_data_aggregation(size):
@@ -57,7 +76,8 @@ def parse_data_for_comparison(value):
     if value is None or len(value) == 0:
         return {}
     # build request to fetch data.
-    comparison_data = request_generator(request_type="post", url="https://fypbackendstr.herokuapp.com/builds-name/bazel-stats",
+    comparison_data = request_generator(request_type="post",
+                                        url="https://fypbackendstr.herokuapp.com/bazel-stats/build-names",
                                         request_body={"listOfBuildNames": value})
     res = dict()
 
@@ -74,6 +94,13 @@ def parse_data_for_comparison(value):
 bazel_stats_layout = html.Div(children=[
 
     html.H1(children='Bazel Stats'),
+    html.H3("Statistics on the latest bazel stats"),
+    dcc.Input(id="stats_input", type="number", placeholder="Enter Limit"),
+    html.Div(id="stats_number-out"),
+    dcc.Graph(
+        figure={},
+        id='stats_graph'
+    ),
     html.H3("Aggregation of the last N Bazel Builds."),
 
     dcc.Input(id="bazel-stats-agg-input", value=2, type="number", placeholder="Enter Bazel Stats Aggregation Size",
@@ -104,6 +131,21 @@ bazel_stats_layout = html.Div(children=[
         figure={},
     )
 ])
+
+
+@app.callback(
+    Output("stats_graph", "figure"),
+    Input("stats_input", "value"),
+)
+def stats_graph_render(number):
+    if number:
+        request_url = "https://fypbackendstr.herokuapp.com/bazel-stats/last/" + str(number)
+    else:
+        request_url = "https://fypbackendstr.herokuapp.com/bazel-stats"
+    df = parse_stats_response(request_generator("get", request_url, None))
+    fig = px.line(df, x="Builds", y=stats_labels, height=800, title="Bazel Stats Data", template="presentation")
+    fig.update_traces(mode='markers+lines')
+    return fig
 
 
 # Callback that listen to the dropdown list. On each Selection of a bazel build that is provided within this dropdown
