@@ -8,7 +8,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 from plotly.subplots import make_subplots
 
-tests_labels = ["testFailed", "testPassed" ]
+tests_labels = ["testFailed", "testPassed"]
 average = ["Average"]
 
 
@@ -53,6 +53,8 @@ def fetch_results_build(type):
 
 
 tests_stats_layout = [html.Div([
+    html.H1('Builds and Tests Stats'),
+    html.H3('Percentage of builds and tests statuses'),
     html.P(""),
     dcc.Dropdown(
         id='names',

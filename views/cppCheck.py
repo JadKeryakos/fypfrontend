@@ -40,7 +40,8 @@ def parse_data_for_comparison(value):
     if value is None or len(value) == 0:
         return {}
     # API call to get build stats for specific build names fetched from the dropdown
-    comparison_data = request_generator("post", "https://fypbackendstr.herokuapp.com/cppChecks/build-names", {"buildNames": value})
+    comparison_data = request_generator("post", "https://fypbackendstr.herokuapp.com/cppChecks/build-names",
+                                        {"buildNames": value})
 
     res = dict()
     for select_value in value:
@@ -79,39 +80,41 @@ def parse_response(payload):
     return res
 
 
-cpp_check_layout = [html.Div([html.H3("Statistics on the latest cppChecks"),
-                              dcc.Input(id="input", type="number", placeholder="Enter Limit"),
-                              html.Div(id="number-out"),
-                              dcc.Graph(
-                                  figure={},
-                                  id='graph'
-                              ),
-                              html.H3("Aggregation of the last N cppChecks"),
-                              dcc.Input(id="bar-input", value=2, type="number", placeholder="Enter Aggregation Size"),
-                              html.Div(id="bar-number-out"),
-                              dcc.Graph(
-                                  id='Aggregation-Graph',
-                                  figure={}
-                              ),
-                              html.H3("Comparison of selected builds"),
-                              html.Div(
-                                  id='my-dropdown-parent',
-                                  children=[dcc.Store(id='data-store'),
-                                            dcc.Interval(interval=120 * 1000, id='interval'),
-                                            dcc.Dropdown(
-                                                id='my-dropdown',
-                                                options=[],
-                                                value=fetch_latest_build(2),
-                                                multi=True
-                                            )
-                                            ]
-                              ),
-                              html.Div(id='my-container'),
-                              dcc.Graph(
-                                  id='ComparatorGraph',
-                                  figure={}
-                              ),
-                              ])]
+cpp_check_layout = [html.Div([
+    html.H1('CppChecks'),
+    html.H3("Statistics on the latest cppChecks"),
+    dcc.Input(id="input", type="number", placeholder="Enter Limit"),
+    html.Div(id="number-out"),
+    dcc.Graph(
+        figure={},
+        id='graph'
+    ),
+    html.H3("Aggregation of the last N cppChecks"),
+    dcc.Input(id="bar-input", value=2, type="number", placeholder="Enter Aggregation Size"),
+    html.Div(id="bar-number-out"),
+    dcc.Graph(
+        id='Aggregation-Graph',
+        figure={}
+    ),
+    html.H3("Comparison of selected builds"),
+    html.Div(
+        id='my-dropdown-parent',
+        children=[dcc.Store(id='data-store'),
+                  dcc.Interval(interval=120 * 1000, id='interval'),
+                  dcc.Dropdown(
+                      id='my-dropdown',
+                      options=[],
+                      value=fetch_latest_build(2),
+                      multi=True
+                  )
+                  ]
+    ),
+    html.Div(id='my-container'),
+    dcc.Graph(
+        id='ComparatorGraph',
+        figure={}
+    ),
+])]
 
 
 @app.callback(
@@ -131,7 +134,7 @@ def bar_render(number):
     }
     fig1 = px.bar(pd.DataFrame.from_dict(
         parse_data(request_generator("post", "https://fypbackendstr.herokuapp.com/cppChecks/agg", body))),
-                  barmode="group", template="presentation")
+        barmode="group", template="presentation")
     return fig1
 
 
