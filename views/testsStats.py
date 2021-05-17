@@ -53,8 +53,7 @@ def fetch_results_build(type):
 
 
 tests_stats_layout = [html.Div([
-    html.H1('Builds and Tests Stats'),
-    html.H3('Percentage of builds and tests statuses'),
+    html.H1('Percentage of builds and tests statuses'),
     html.P(""),
     dcc.Dropdown(
         id='names',
@@ -72,6 +71,7 @@ tests_stats_layout = [html.Div([
                       color_discrete_sequence=["lightcyan", "darkblue"],
                       color_discrete_map={'success': 'lightcyan', 'failure': 'darkblue'})
     ),
+    html.H1('Tests Stats'),
     html.H3("Statistics on the latest tests"),
     dcc.Input(id="tests_input", type="number", placeholder="Enter Limit"),
     dcc.Graph(
