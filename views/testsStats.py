@@ -180,6 +180,8 @@ def graph_render(number):
     subfig.layout.yaxis.title = "Value (For Failed and Passed Tests)"
     subfig.layout.yaxis2.title = "Percentage (For Average)"
     subfig.for_each_trace(lambda t: t.update(line=dict(color=t.marker.color)))
+    subfig.update_layout(
+        template="xgridoff")
 
     return subfig
 
