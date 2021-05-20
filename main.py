@@ -29,8 +29,7 @@ app.layout = html.Div([
 
 not_found_layout = [html.H3("404"), html.H5("Page not found")]
 layout_dict = {
-    '/': home_layout,
-    '/home': home_layout,
+    '/': tests_stats_layout,
     '/builds-tests-stats': tests_stats_layout,
     '/bazel-stats': bazel_stats_layout,
     '/cpp-check': cpp_check_layout,
